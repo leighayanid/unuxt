@@ -12,7 +12,7 @@ const navItems = [
     <div class="container mx-auto h-full px-4 flex items-center justify-between">
       <!-- Logo -->
       <NuxtLink to="/" class="font-bold text-xl">
-        Unuxt
+        UNuxt
       </NuxtLink>
 
       <!-- Navigation -->

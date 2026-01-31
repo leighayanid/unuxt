@@ -4,7 +4,7 @@ definePageMeta({
 });
 
 useSeoMeta({
-  title: "Sign Up - Unuxt",
+  title: "Sign Up - UNuxt",
 });
 
 const { register, loginWithGoogle, loginWithGitHub } = useAuth();
@@ -102,6 +102,7 @@ async function handleOAuth(provider: "google" | "github") {
           placeholder="Your name"
           required
           autocomplete="name"
+          class="w-full"
         />
       </UFormField>
 
@@ -112,6 +113,7 @@ async function handleOAuth(provider: "google" | "github") {
           placeholder="you@example.com"
           required
           autocomplete="email"
+          class="w-full"
         />
       </UFormField>
 
@@ -122,6 +124,7 @@ async function handleOAuth(provider: "google" | "github") {
           placeholder="Create a password"
           required
           autocomplete="new-password"
+          class="w-full"
         >
           <template #trailing>
             <UButton
@@ -141,6 +144,7 @@ async function handleOAuth(provider: "google" | "github") {
           placeholder="Confirm your password"
           required
           autocomplete="new-password"
+          class="w-full"
         />
       </UFormField>
 

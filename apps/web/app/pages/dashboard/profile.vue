@@ -4,7 +4,7 @@ definePageMeta({
 });
 
 useSeoMeta({
-  title: "Profile - Unuxt",
+  title: "Profile - UNuxt",
 });
 
 const { user, updateProfile } = useAuth();

@@ -6,7 +6,7 @@ definePageMeta({
 });
 
 useSeoMeta({
-  title: "Settings - Unuxt",
+  title: "Settings - UNuxt",
 });
 
 const { user, logout } = useAuth();
@@ -215,6 +215,7 @@ async function deleteAccount() {
                 v-model="twoFactorCode"
                 placeholder="Enter 6-digit code"
                 maxlength="6"
+                class="w-full"
               />
             </UFormField>
 

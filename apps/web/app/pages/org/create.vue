@@ -6,7 +6,7 @@ definePageMeta({
 });
 
 useSeoMeta({
-  title: "Create Organization - Unuxt",
+  title: "Create Organization - UNuxt",
 });
 
 const { createOrganization } = useOrganization();

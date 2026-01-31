@@ -21,7 +21,7 @@ const { activeOrg, organizations } = useOrganization();
             @click="sidebarOpen = !sidebarOpen"
           />
           <NuxtLink to="/dashboard" class="font-bold text-lg">
-            Unuxt
+            UNuxt
           </NuxtLink>
         </div>
 

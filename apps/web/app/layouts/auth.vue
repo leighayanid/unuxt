@@ -9,7 +9,7 @@ definePageMeta({
     <div class="w-full max-w-md">
       <div class="text-center mb-8">
         <NuxtLink to="/" class="inline-block">
-          <h1 class="text-2xl font-bold text-primary">Unuxt</h1>
+          <h1 class="text-2xl font-bold text-primary">UNuxt</h1>
         </NuxtLink>
       </div>
       <UCard>

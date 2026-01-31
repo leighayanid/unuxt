@@ -1,12 +1,12 @@
 <script setup lang="ts">
-const { $$authClient } = useNuxtApp();
+const { $authClient } = useNuxtApp();
 
 definePageMeta({
   layout: "auth",
 });
 
 useSeoMeta({
-  title: "Forgot Password - Unuxt",
+  title: "Forgot Password - UNuxt",
 });
 
 const toast = useToast();
@@ -63,6 +63,7 @@ async function handleSubmit() {
           placeholder="you@example.com"
           required
           autocomplete="email"
+          class="w-full"
         />
       </UFormField>
 

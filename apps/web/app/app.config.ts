@@ -8,7 +8,7 @@ export default defineAppConfig({
 
   // App metadata
   app: {
-    name: "Unuxt",
+    name: "UNuxt",
     description: "Universal Nuxt 4 Starter Template",
   },
 });

@@ -4,7 +4,7 @@ definePageMeta({
 });
 
 useSeoMeta({
-  title: "Dashboard - Unuxt",
+  title: "Dashboard - UNuxt",
 });
 
 const { user } = useAuth();

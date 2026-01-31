@@ -4,7 +4,7 @@ definePageMeta({
 });
 
 useSeoMeta({
-  title: "Magic Link - Unuxt",
+  title: "Magic Link - UNuxt",
 });
 
 const { loginWithMagicLink } = useAuth();
@@ -59,6 +59,7 @@ async function handleSubmit() {
           placeholder="you@example.com"
           required
           autocomplete="email"
+          class="w-full"
         />
       </UFormField>
 

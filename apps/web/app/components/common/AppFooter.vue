@@ -7,7 +7,7 @@ const year = new Date().getFullYear();
     <div class="container mx-auto">
       <div class="flex flex-col md:flex-row items-center justify-between gap-4">
         <p class="text-muted text-sm">
-          &copy; {{ year }} Unuxt. All rights reserved.
+          &copy; {{ year }} UNuxt. All rights reserved.
         </p>
         <div class="flex items-center gap-6">
           <NuxtLink to="/privacy" class="text-sm text-muted hover:text-default">

@@ -4,8 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "nuxt dev",
-    "build": "nuxt build",
+    "dev": "nuxt dev --dotenv ../../.env",
+    "build": "nuxt build --dotenv ../../.env",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
@@ -14,23 +14,27 @@
     "typecheck": "nuxt typecheck"
   },
   "dependencies": {
-    "@nuxt/ui": "^3.0.0",
     "@nuxt/image": "^1.9.0",
-    "@vueuse/nuxt": "^12.5.0",
-    "motion-v": "^1.0.1",
-    "nuxt": "^3.15.4",
+    "@nuxt/ui": "^3.0.0",
     "@nuxtjs/cloudinary": "^2.1.0",
-    "vue": "^3.5.13",
-    "vue-router": "^4.5.0",
     "@unuxt/auth": "workspace:*",
     "@unuxt/db": "workspace:*",
     "@unuxt/types": "workspace:*",
+    "@unuxt/ui": "workspace:*",
     "@unuxt/utils": "workspace:*",
-    "@unuxt/ui": "workspace:*"
+    "@vueuse/nuxt": "^12.5.0",
+    "motion-v": "^1.0.1",
+    "nuxt": "^3.15.4",
+    "tailwindcss": "^4.1.18",
+    "vue": "^3.5.13",
+    "vue-router": "^4.5.0"
   },
   "devDependencies": {
+    "@iconify-json/lucide": "^1.2.87",
+    "@iconify-json/simple-icons": "^1.2.68",
     "@nuxt/eslint": "^0.7.4",
     "@unuxt/config": "workspace:*",
-    "typescript": "^5.7.3"
+    "typescript": "^5.7.3",
+    "vue-tsc": "^3.2.4"
   }
 }

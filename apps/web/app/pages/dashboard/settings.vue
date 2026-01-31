@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { authClient } from "@unuxt/auth/client";
+const { $$authClient } = useNuxtApp();
 
 definePageMeta({
   layout: "dashboard",
@@ -23,7 +23,7 @@ const twoFactorLoading = ref(false);
 async function setupTwoFactor() {
   twoFactorLoading.value = true;
   try {
-    const result = await authClient.twoFactor.enable();
+    const result = await $authClient.twoFactor.enable();
     twoFactorSetup.value = result.data as any;
     showTwoFactorSetup.value = true;
   } catch (error: any) {
@@ -40,7 +40,7 @@ async function setupTwoFactor() {
 async function verifyTwoFactor() {
   twoFactorLoading.value = true;
   try {
-    await authClient.twoFactor.verifyTotp({ code: twoFactorCode.value });
+    await $authClient.twoFactor.verifyTotp({ code: twoFactorCode.value });
     twoFactorEnabled.value = true;
     showTwoFactorSetup.value = false;
     toast.add({
@@ -62,7 +62,7 @@ async function verifyTwoFactor() {
 async function disableTwoFactor() {
   twoFactorLoading.value = true;
   try {
-    await authClient.twoFactor.disable({ password: "" }); // TODO: Add password modal
+    await $authClient.twoFactor.disable({ password: "" }); // TODO: Add password modal
     twoFactorEnabled.value = false;
     toast.add({
       title: "Success",

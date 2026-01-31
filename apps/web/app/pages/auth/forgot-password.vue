@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { authClient } from "@unuxt/auth/client";
+const { $$authClient } = useNuxtApp();
 
 definePageMeta({
   layout: "auth",
@@ -18,7 +18,7 @@ const sent = ref(false);
 async function handleSubmit() {
   loading.value = true;
   try {
-    await authClient.forgetPassword({
+    await $authClient.forgetPassword({
       email: email.value,
       redirectTo: "/auth/reset-password",
     });

@@ -3,7 +3,7 @@ const { user, logout } = useAuth();
 </script>
 
 <template>
-  <UDropdown
+  <UDropdownMenu
     :items="[
       [
         {
@@ -35,5 +35,5 @@ const { user, logout } = useAuth();
         <p class="text-xs text-muted truncate">{{ user?.email }}</p>
       </div>
     </template>
-  </UDropdown>
+  </UDropdownMenu>
 </template>

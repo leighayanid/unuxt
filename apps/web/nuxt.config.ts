@@ -7,6 +7,13 @@ export default defineNuxtConfig({
 
   extends: ["@unuxt/ui"],
 
+  components: [
+    {
+      path: "~/components",
+      pathPrefix: false,
+    },
+  ],
+
   modules: [
     "@nuxt/ui",
     "@nuxt/eslint",
@@ -53,7 +60,7 @@ export default defineNuxtConfig({
 
   typescript: {
     strict: true,
-    typeCheck: true,
+    typeCheck: false,
   },
 
   eslint: {

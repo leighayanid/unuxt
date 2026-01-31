@@ -12,7 +12,7 @@ function goToCreate() {
 </script>
 
 <template>
-  <UDropdown
+  <UDropdownMenu
     :items="[
       organizations.map((org: any) => ({
         label: org.name,
@@ -31,5 +31,5 @@ function goToCreate() {
       <span class="hidden sm:inline">{{ activeOrg?.name || 'Select Organization' }}</span>
       <UIcon name="i-lucide-chevron-down" class="text-xs" />
     </UButton>
-  </UDropdown>
+  </UDropdownMenu>
 </template>

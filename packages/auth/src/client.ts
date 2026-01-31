@@ -3,19 +3,11 @@ import { organizationClient } from "better-auth/client/plugins";
 import { twoFactorClient } from "better-auth/client/plugins";
 import { magicLinkClient } from "better-auth/client/plugins";
 
-export const authClient = createAuthClient({
-  baseURL: "/api/auth",
-  plugins: [organizationClient(), twoFactorClient(), magicLinkClient()],
-});
+export type AuthClient = ReturnType<typeof createAuthClient>;
 
-// Export individual methods for easier usage
-export const {
-  signIn,
-  signUp,
-  signOut,
-  useSession,
-  getSession,
-  organization,
-  twoFactor,
-  magicLink,
-} = authClient;
+export function createClient(baseURL: string) {
+  return createAuthClient({
+    baseURL: `${baseURL}/api/auth`,
+    plugins: [organizationClient(), twoFactorClient(), magicLinkClient()],
+  });
+}

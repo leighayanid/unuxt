@@ -35,7 +35,7 @@ const navItems = [
           <UButton to="/dashboard" variant="ghost">
             Dashboard
           </UButton>
-          <UDropdown
+          <UDropdownMenu
             :items="[
               [
                 { label: 'Profile', icon: 'i-lucide-user', to: '/dashboard/profile' },
@@ -52,7 +52,7 @@ const navItems = [
               size="sm"
               class="cursor-pointer"
             />
-          </UDropdown>
+          </UDropdownMenu>
         </template>
 
         <template v-else>

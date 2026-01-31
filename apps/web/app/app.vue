@@ -10,11 +10,10 @@ useHead({
 </script>
 
 <template>
-  <div>
+  <UApp>
     <NuxtLoadingIndicator color="var(--ui-primary)" />
     <NuxtLayout>
       <NuxtPage />
     </NuxtLayout>
-    <UNotifications />
-  </div>
+  </UApp>
 </template>

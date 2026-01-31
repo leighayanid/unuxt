@@ -1,13 +1,12 @@
-import { authClient } from "@unuxt/auth/client";
-
 export function useAuth() {
-  const session = authClient.useSession();
+  const { $authClient } = useNuxtApp();
+  const session = $authClient.useSession();
   const user = computed(() => session.value?.data?.user || null);
   const isAuthenticated = computed(() => !!session.value?.data?.session);
   const isLoading = computed(() => session.value?.isPending ?? true);
 
   async function login(email: string, password: string) {
-    const result = await authClient.signIn.email({
+    const result = await $authClient.signIn.email({
       email,
       password,
     });
@@ -18,21 +17,21 @@ export function useAuth() {
   }
 
   async function loginWithGoogle() {
-    return authClient.signIn.social({
+    return $authClient.signIn.social({
       provider: "google",
       callbackURL: "/dashboard",
     });
   }
 
   async function loginWithGitHub() {
-    return authClient.signIn.social({
+    return $authClient.signIn.social({
       provider: "github",
       callbackURL: "/dashboard",
     });
   }
 
   async function loginWithMagicLink(email: string) {
-    const result = await authClient.signIn.magicLink({
+    const result = await $authClient.signIn.magicLink({
       email,
       callbackURL: "/dashboard",
     });
@@ -43,7 +42,7 @@ export function useAuth() {
   }
 
   async function register(email: string, password: string, name: string) {
-    const result = await authClient.signUp.email({
+    const result = await $authClient.signUp.email({
       email,
       password,
       name,
@@ -55,12 +54,12 @@ export function useAuth() {
   }
 
   async function logout() {
-    await authClient.signOut();
+    await $authClient.signOut();
     await navigateTo("/");
   }
 
   async function updateProfile(data: { name?: string; image?: string }) {
-    const result = await authClient.updateUser(data);
+    const result = await $authClient.updateUser(data);
     if (result.error) {
       throw new Error(result.error.message);
     }

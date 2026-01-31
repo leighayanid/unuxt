@@ -1,14 +1,13 @@
-import { authClient } from "@unuxt/auth/client";
-
 export function useOrganization() {
-  const activeOrg = authClient.useActiveOrganization();
-  const organizations = authClient.useListOrganizations();
+  const { $$authClient } = useNuxtApp();
+  const activeOrg = $$authClient.useActiveOrganization();
+  const organizations = $$authClient.useListOrganizations();
 
   const activeOrgData = computed(() => activeOrg.value?.data || null);
   const organizationsList = computed(() => organizations.value?.data || []);
 
   async function createOrganization(name: string, slug: string, logo?: string) {
-    const result = await authClient.organization.create({
+    const result = await $authClient.organization.create({
       name,
       slug,
       logo,
@@ -20,7 +19,7 @@ export function useOrganization() {
   }
 
   async function switchOrganization(organizationId: string) {
-    const result = await authClient.organization.setActive({
+    const result = await $authClient.organization.setActive({
       organizationId,
     });
     if (result.error) {
@@ -34,7 +33,7 @@ export function useOrganization() {
     slug?: string;
     logo?: string;
   }) {
-    const result = await authClient.organization.update(data);
+    const result = await $authClient.organization.update(data);
     if (result.error) {
       throw new Error(result.error.message);
     }
@@ -42,7 +41,7 @@ export function useOrganization() {
   }
 
   async function deleteOrganization(organizationId: string) {
-    const result = await authClient.organization.delete({
+    const result = await $authClient.organization.delete({
       organizationId,
     });
     if (result.error) {
@@ -52,7 +51,7 @@ export function useOrganization() {
   }
 
   async function inviteMember(email: string, role: "admin" | "member") {
-    const result = await authClient.organization.inviteMember({
+    const result = await $authClient.organization.inviteMember({
       email,
       role,
     });
@@ -63,7 +62,7 @@ export function useOrganization() {
   }
 
   async function removeMember(memberId: string) {
-    const result = await authClient.organization.removeMember({
+    const result = await $authClient.organization.removeMember({
       memberIdOrEmail: memberId,
     });
     if (result.error) {
@@ -73,7 +72,7 @@ export function useOrganization() {
   }
 
   async function updateMemberRole(memberId: string, role: string) {
-    const result = await authClient.organization.updateMemberRole({
+    const result = await $authClient.organization.updateMemberRole({
       memberId,
       role,
     });
@@ -84,7 +83,7 @@ export function useOrganization() {
   }
 
   async function cancelInvitation(invitationId: string) {
-    const result = await authClient.organization.cancelInvitation({
+    const result = await $authClient.organization.cancelInvitation({
       invitationId,
     });
     if (result.error) {

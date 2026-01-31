@@ -1,0 +1,36 @@
+{
+  "name": "@unuxt/web",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "nuxt dev",
+    "build": "nuxt build",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "typecheck": "nuxt typecheck"
+  },
+  "dependencies": {
+    "@nuxt/ui": "^3.0.0",
+    "@nuxt/image": "^1.9.0",
+    "@vueuse/nuxt": "^12.5.0",
+    "motion-v": "^1.0.1",
+    "nuxt": "^3.15.4",
+    "@nuxtjs/cloudinary": "^2.1.0",
+    "vue": "^3.5.13",
+    "vue-router": "^4.5.0",
+    "@unuxt/auth": "workspace:*",
+    "@unuxt/db": "workspace:*",
+    "@unuxt/types": "workspace:*",
+    "@unuxt/utils": "workspace:*",
+    "@unuxt/ui": "workspace:*"
+  },
+  "devDependencies": {
+    "@nuxt/eslint": "^0.7.4",
+    "@unuxt/config": "workspace:*",
+    "typescript": "^5.7.3"
+  }
+}

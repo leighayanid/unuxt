@@ -1,0 +1,21 @@
+{
+  "name": "@unuxt/auth",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./server": "./src/server.ts",
+    "./client": "./src/client.ts"
+  },
+  "dependencies": {
+    "better-auth": "^1.1.14",
+    "@unuxt/db": "workspace:*"
+  },
+  "devDependencies": {
+    "@unuxt/config": "workspace:*",
+    "typescript": "^5.7.3"
+  }
+}

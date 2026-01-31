@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "./base.json",
+  "compilerOptions": {
+    "jsx": "preserve",
+    "jsxImportSource": "vue",
+    "paths": {
+      "#imports": ["./.nuxt/imports.d.ts"],
+      "#app": ["./.nuxt/nuxt.d.ts"],
+      "~/*": ["./*"],
+      "@/*": ["./*"]
+    }
+  }
+}

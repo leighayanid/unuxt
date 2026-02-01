@@ -20,7 +20,7 @@ export default defineNuxtConfig({
     "@nuxt/image",
     "@vueuse/nuxt",
     "motion-v/nuxt",
-    "@nuxtjs/cloudinary",
+    ...(process.env.CLOUDINARY_CLOUD_NAME ? ["@nuxtjs/cloudinary"] : []),
   ],
 
   css: ["~/assets/css/main.css"],

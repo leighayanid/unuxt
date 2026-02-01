@@ -86,9 +86,29 @@ const benefits = [
     <section class="relative min-h-[90vh] flex items-center justify-center">
       <!-- Animated Background -->
       <div class="absolute inset-0 -z-10">
+        <!-- SVG Grid Pattern -->
+        <svg class="absolute inset-0 w-full h-full opacity-[0.03] dark:opacity-[0.05]" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
+              <path d="M 60 0 L 0 0 0 60" fill="none" stroke="currentColor" stroke-width="1"/>
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#grid)" />
+        </svg>
+
+        <!-- Animated Gradient Orbs -->
         <div class="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-transparent" />
-        <div class="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[100px] animate-pulse" />
-        <div class="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-primary/5 rounded-full blur-[80px] animate-pulse animation-delay-1000" />
+        <div class="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[100px] animate-float" />
+        <div class="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-primary/5 rounded-full blur-[80px] animate-float-delayed" />
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-conic from-primary/10 via-transparent to-primary/5 rounded-full blur-[120px] animate-spin-slow" />
+
+        <!-- Floating Particles -->
+        <div class="absolute top-20 left-[15%] w-2 h-2 bg-primary/40 rounded-full animate-float-particle" />
+        <div class="absolute top-40 right-[20%] w-3 h-3 bg-primary/30 rounded-full animate-float-particle-delayed" />
+        <div class="absolute bottom-32 left-[25%] w-2 h-2 bg-primary/50 rounded-full animate-float-particle" style="animation-delay: 1s;" />
+        <div class="absolute top-1/3 right-[10%] w-1.5 h-1.5 bg-primary/40 rounded-full animate-float-particle-delayed" />
+
+        <!-- Radial Fade -->
         <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,var(--ui-bg)_70%)]" />
       </div>
 
@@ -96,8 +116,9 @@ const benefits = [
         <div class="max-w-4xl mx-auto text-center">
           <!-- Badge -->
           <div class="animate-fade-in">
-            <UBadge color="primary" variant="subtle" size="lg" class="mb-6">
-              <UIcon name="i-lucide-sparkles" class="mr-1" />
+            <UBadge color="primary" variant="subtle" size="lg" class="mb-6 relative overflow-hidden">
+              <span class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer" />
+              <UIcon name="i-lucide-sparkles" class="mr-1 animate-pulse" />
               Built for Nuxt 4
             </UBadge>
           </div>
@@ -117,18 +138,20 @@ const benefits = [
           <!-- CTA Buttons -->
           <div class="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in animation-delay-300">
             <template v-if="isAuthenticated">
-              <UButton to="/dashboard" size="xl" class="min-w-[200px]">
+              <UButton to="/dashboard" size="xl" class="min-w-[200px] justify-center group">
                 <UIcon name="i-lucide-layout-dashboard" class="mr-2" />
-                Go to Dashboard
+                <span>Go to Dashboard</span>
+                <UIcon name="i-lucide-arrow-right" class="ml-2 transition-transform group-hover:translate-x-1" />
               </UButton>
             </template>
             <template v-else>
-              <UButton to="/auth/register" size="xl" class="min-w-[200px]">
-                Get Started Free
-                <UIcon name="i-lucide-arrow-right" class="ml-2" />
+              <UButton to="/auth/register" size="xl" class="min-w-[200px] justify-center group">
+                <span>Get Started Free</span>
+                <UIcon name="i-lucide-arrow-right" class="ml-2 transition-transform group-hover:translate-x-1" />
               </UButton>
-              <UButton to="/auth/login" size="xl" variant="outline" class="min-w-[200px]">
-                Sign In
+              <UButton to="/auth/login" size="xl" variant="outline" class="min-w-[200px] justify-center hover:border-primary/50 hover:bg-primary/5 transition-all">
+                <UIcon name="i-lucide-log-in" class="mr-2" />
+                <span>Sign In</span>
               </UButton>
             </template>
           </div>
@@ -138,9 +161,9 @@ const benefits = [
             <div
               v-for="tech in techStack"
               :key="tech.label"
-              class="flex items-center gap-2 px-4 py-2 rounded-full bg-muted/50 border border-default/50 backdrop-blur-sm"
+              class="group flex items-center gap-2 px-4 py-2 rounded-full bg-muted/50 border border-default/50 backdrop-blur-sm hover:border-primary/30 hover:bg-muted transition-all duration-300 cursor-default"
             >
-              <UIcon :name="tech.icon" :class="['text-lg', tech.color]" />
+              <UIcon :name="tech.icon" :class="['text-lg transition-transform group-hover:scale-110', tech.color]" />
               <span class="text-sm font-medium">{{ tech.label }}</span>
             </div>
           </div>
@@ -149,15 +172,26 @@ const benefits = [
     </section>
 
     <!-- Stats Section -->
-    <section class="border-y border-default bg-muted/30">
-      <UContainer>
+    <section class="border-y border-default bg-muted/30 relative overflow-hidden">
+      <!-- Subtle background pattern -->
+      <div class="absolute inset-0 opacity-[0.02]">
+        <svg class="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="dots" width="20" height="20" patternUnits="userSpaceOnUse">
+              <circle cx="2" cy="2" r="1" fill="currentColor"/>
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#dots)" />
+        </svg>
+      </div>
+      <UContainer class="relative">
         <div class="grid grid-cols-2 md:grid-cols-4 divide-x divide-default">
           <div
             v-for="stat in stats"
             :key="stat.label"
-            class="py-12 text-center"
+            class="py-12 text-center group hover:bg-primary/5 transition-colors cursor-default"
           >
-            <div class="text-3xl sm:text-4xl font-bold text-primary mb-2">{{ stat.value }}</div>
+            <div class="text-3xl sm:text-4xl font-bold text-primary mb-2 group-hover:scale-110 transition-transform">{{ stat.value }}</div>
             <div class="text-sm text-muted">{{ stat.label }}</div>
           </div>
         </div>
@@ -165,8 +199,19 @@ const benefits = [
     </section>
 
     <!-- Features Section -->
-    <section class="py-24 lg:py-32">
-      <UContainer>
+    <section class="py-24 lg:py-32 relative">
+      <!-- Subtle grid background -->
+      <div class="absolute inset-0 opacity-[0.02]">
+        <svg class="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="features-grid" width="40" height="40" patternUnits="userSpaceOnUse">
+              <path d="M 40 0 L 0 0 0 40" fill="none" stroke="currentColor" stroke-width="0.5"/>
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#features-grid)" />
+        </svg>
+      </div>
+      <UContainer class="relative">
         <div class="text-center mb-16">
           <UBadge color="primary" variant="subtle" class="mb-4">Features</UBadge>
           <h2 class="text-3xl sm:text-4xl font-bold mb-4">
@@ -179,13 +224,16 @@ const benefits = [
 
         <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           <div
-            v-for="feature in features"
+            v-for="(feature, index) in features"
             :key="feature.title"
-            class="group relative p-6 rounded-2xl border border-default bg-default/50 hover:bg-default hover:border-primary/30 transition-all duration-300"
+            class="group relative p-6 rounded-2xl border border-default bg-default/50 hover:bg-default hover:border-primary/30 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-primary/5"
+            :style="{ animationDelay: `${index * 100}ms` }"
           >
-            <div :class="['absolute inset-0 rounded-2xl bg-gradient-to-br opacity-0 group-hover:opacity-100 transition-opacity duration-300', feature.gradient]" />
+            <!-- Gradient glow on hover -->
+            <div :class="['absolute -inset-px rounded-2xl bg-gradient-to-br opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-sm', feature.gradient]" />
+            <div class="absolute inset-0 rounded-2xl bg-default/80 backdrop-blur-sm" />
             <div class="relative">
-              <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
+              <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 group-hover:scale-110 transition-all duration-300">
                 <UIcon :name="feature.icon" class="text-2xl text-primary" />
               </div>
               <h3 class="text-lg font-semibold mb-2">{{ feature.title }}</h3>
@@ -197,8 +245,12 @@ const benefits = [
     </section>
 
     <!-- Benefits Section -->
-    <section class="py-24 lg:py-32 bg-muted/30">
-      <UContainer>
+    <section class="py-24 lg:py-32 bg-muted/30 relative overflow-hidden">
+      <!-- Decorative elements -->
+      <div class="absolute top-20 left-10 w-20 h-20 border border-primary/10 rounded-full animate-float opacity-50" />
+      <div class="absolute bottom-20 right-10 w-32 h-32 border border-primary/10 rounded-full animate-float-delayed opacity-30" />
+      <div class="absolute top-1/2 left-5 w-2 h-2 bg-primary/30 rounded-full animate-float-particle" />
+      <UContainer class="relative">
         <div class="grid lg:grid-cols-2 gap-16 items-center">
           <div>
             <UBadge color="primary" variant="subtle" class="mb-4">Why UNuxt?</UBadge>
@@ -266,8 +318,12 @@ const benefits = [
     <!-- CTA Section -->
     <section class="py-24 lg:py-32 relative overflow-hidden">
       <div class="absolute inset-0 -z-10">
+        <!-- SVG wave pattern -->
+        <svg class="absolute bottom-0 left-0 w-full opacity-[0.03]" viewBox="0 0 1440 320" xmlns="http://www.w3.org/2000/svg">
+          <path fill="currentColor" d="M0,192L48,197.3C96,203,192,213,288,229.3C384,245,480,267,576,250.7C672,235,768,181,864,181.3C960,181,1056,235,1152,234.7C1248,235,1344,181,1392,154.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"/>
+        </svg>
         <div class="absolute inset-0 bg-gradient-to-t from-primary/5 to-transparent" />
-        <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-primary/10 rounded-full blur-[100px]" />
+        <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-primary/10 rounded-full blur-[100px] animate-float" />
       </div>
 
       <UContainer>
@@ -282,24 +338,34 @@ const benefits = [
 
           <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
             <template v-if="isAuthenticated">
-              <UButton to="/dashboard" size="xl">
-                Open Dashboard
-                <UIcon name="i-lucide-arrow-right" class="ml-2" />
+              <UButton to="/dashboard" size="xl" class="justify-center group">
+                <span>Open Dashboard</span>
+                <UIcon name="i-lucide-arrow-right" class="ml-2 transition-transform group-hover:translate-x-1" />
               </UButton>
             </template>
             <template v-else>
-              <UButton to="/auth/register" size="xl">
-                Start Building Now
-                <UIcon name="i-lucide-arrow-right" class="ml-2" />
+              <UButton to="/auth/register" size="xl" class="justify-center group">
+                <span>Start Building Now</span>
+                <UIcon name="i-lucide-arrow-right" class="ml-2 transition-transform group-hover:translate-x-1" />
+              </UButton>
+              <UButton
+                to="/docs"
+                size="xl"
+                variant="outline"
+                class="justify-center hover:border-primary/50 hover:bg-primary/5 transition-all"
+              >
+                <UIcon name="i-lucide-book-open" class="mr-2" />
+                <span>Documentation</span>
               </UButton>
               <UButton
                 to="https://github.com/unuxt/unuxt"
                 target="_blank"
                 size="xl"
                 variant="ghost"
+                class="justify-center group"
               >
-                <UIcon name="i-simple-icons-github" class="mr-2" />
-                Star on GitHub
+                <UIcon name="i-simple-icons-github" class="mr-2 transition-transform group-hover:scale-110" />
+                <span>Star on GitHub</span>
               </UButton>
             </template>
           </div>
@@ -321,8 +387,80 @@ const benefits = [
   }
 }
 
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-20px) scale(1.05);
+  }
+}
+
+@keyframes float-particle {
+  0%, 100% {
+    transform: translateY(0) translateX(0);
+    opacity: 0.4;
+  }
+  25% {
+    transform: translateY(-15px) translateX(5px);
+    opacity: 0.8;
+  }
+  50% {
+    transform: translateY(-25px) translateX(-5px);
+    opacity: 0.6;
+  }
+  75% {
+    transform: translateY(-10px) translateX(10px);
+    opacity: 0.9;
+  }
+}
+
+@keyframes spin-slow {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
 .animate-fade-in {
   animation: fade-in 0.6s ease-out forwards;
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-float-delayed {
+  animation: float 8s ease-in-out infinite;
+  animation-delay: 2s;
+}
+
+.animate-float-particle {
+  animation: float-particle 4s ease-in-out infinite;
+}
+
+.animate-float-particle-delayed {
+  animation: float-particle 5s ease-in-out infinite;
+  animation-delay: 1.5s;
+}
+
+.animate-spin-slow {
+  animation: spin-slow 30s linear infinite;
+}
+
+.animate-shimmer {
+  animation: shimmer 3s ease-in-out infinite;
 }
 
 .animation-delay-100 {
@@ -347,5 +485,9 @@ const benefits = [
 
 .animation-delay-1000 {
   animation-delay: 1s;
+}
+
+.bg-gradient-conic {
+  background: conic-gradient(from 0deg, var(--tw-gradient-stops));
 }
 </style>

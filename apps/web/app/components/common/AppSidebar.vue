@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const route = useRoute();
-const { isAdmin } = usePermissions();
+const { isGlobalAdmin } = useAuth();
 
 const navigation = computed(() => [
   {
@@ -60,7 +60,7 @@ function isActive(to: string) {
       <span>{{ item.label }}</span>
     </NuxtLink>
 
-    <template v-if="isAdmin">
+    <template v-if="isGlobalAdmin">
       <div class="pt-4 pb-2">
         <p class="px-3 text-xs font-medium text-muted uppercase">Admin</p>
       </div>

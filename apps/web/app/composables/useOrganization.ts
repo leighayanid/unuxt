@@ -1,7 +1,7 @@
 export function useOrganization() {
-  const { $$authClient } = useNuxtApp();
-  const activeOrg = $$authClient.useActiveOrganization();
-  const organizations = $$authClient.useListOrganizations();
+  const { $authClient } = useNuxtApp();
+  const activeOrg = $authClient.useActiveOrganization();
+  const organizations = $authClient.useListOrganizations();
 
   const activeOrgData = computed(() => activeOrg.value?.data || null);
   const organizationsList = computed(() => organizations.value?.data || []);

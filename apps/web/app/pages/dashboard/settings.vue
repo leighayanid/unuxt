@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { $$authClient } = useNuxtApp();
+const { $authClient } = useNuxtApp();
 
 definePageMeta({
   layout: "dashboard",
@@ -19,6 +19,10 @@ const showTwoFactorSetup = ref(false);
 const twoFactorSetup = ref<{ qrCode: string; secret: string } | null>(null);
 const twoFactorCode = ref("");
 const twoFactorLoading = ref(false);
+
+// 2FA Disable Modal
+const showDisable2FAModal = ref(false);
+const disable2FAPassword = ref("");
 
 async function setupTwoFactor() {
   twoFactorLoading.value = true;
@@ -43,6 +47,7 @@ async function verifyTwoFactor() {
     await $authClient.twoFactor.verifyTotp({ code: twoFactorCode.value });
     twoFactorEnabled.value = true;
     showTwoFactorSetup.value = false;
+    twoFactorCode.value = "";
     toast.add({
       title: "Success",
       description: "Two-factor authentication enabled",
@@ -59,11 +64,27 @@ async function verifyTwoFactor() {
   }
 }
 
+function openDisable2FAModal() {
+  disable2FAPassword.value = "";
+  showDisable2FAModal.value = true;
+}
+
 async function disableTwoFactor() {
+  if (!disable2FAPassword.value) {
+    toast.add({
+      title: "Error",
+      description: "Password is required",
+      color: "error",
+    });
+    return;
+  }
+
   twoFactorLoading.value = true;
   try {
-    await $authClient.twoFactor.disable({ password: "" }); // TODO: Add password modal
+    await $authClient.twoFactor.disable({ password: disable2FAPassword.value });
     twoFactorEnabled.value = false;
+    showDisable2FAModal.value = false;
+    disable2FAPassword.value = "";
     toast.add({
       title: "Success",
       description: "Two-factor authentication disabled",
@@ -83,11 +104,25 @@ async function disableTwoFactor() {
 // Delete Account
 const showDeleteModal = ref(false);
 const deleteLoading = ref(false);
+const deleteAccountPassword = ref("");
 
 async function deleteAccount() {
+  if (!deleteAccountPassword.value) {
+    toast.add({
+      title: "Error",
+      description: "Password is required to delete your account",
+      color: "error",
+    });
+    return;
+  }
+
   deleteLoading.value = true;
   try {
-    // TODO: Implement account deletion
+    await $fetch("/api/account/delete", {
+      method: "POST",
+      body: { password: deleteAccountPassword.value },
+    });
+
     await logout();
     router.push("/");
     toast.add({
@@ -98,12 +133,17 @@ async function deleteAccount() {
   } catch (error: any) {
     toast.add({
       title: "Error",
-      description: error.message || "Failed to delete account",
+      description: error.data?.message || error.message || "Failed to delete account",
       color: "error",
     });
   } finally {
     deleteLoading.value = false;
   }
+}
+
+function openDeleteModal() {
+  deleteAccountPassword.value = "";
+  showDeleteModal.value = true;
 }
 </script>
 
@@ -153,7 +193,7 @@ async function deleteAccount() {
               v-else
               variant="outline"
               color="error"
-              @click="disableTwoFactor"
+              @click="openDisable2FAModal"
               :loading="twoFactorLoading"
             >
               Disable
@@ -186,7 +226,7 @@ async function deleteAccount() {
               Permanently delete your account and all data
             </p>
           </div>
-          <UButton color="error" @click="showDeleteModal = true">
+          <UButton color="error" @click="openDeleteModal">
             Delete Account
           </UButton>
         </div>
@@ -232,19 +272,71 @@ async function deleteAccount() {
       </template>
     </UModal>
 
+    <!-- Disable 2FA Modal -->
+    <UModal v-model:open="showDisable2FAModal">
+      <template #content>
+        <div class="p-6">
+          <h3 class="text-lg font-semibold mb-4">Disable Two-Factor Authentication</h3>
+
+          <p class="text-muted mb-4">
+            Enter your password to disable two-factor authentication.
+          </p>
+
+          <UFormField label="Password">
+            <UInput
+              v-model="disable2FAPassword"
+              type="password"
+              placeholder="Enter your password"
+              class="w-full"
+            />
+          </UFormField>
+
+          <div class="flex justify-end gap-2 mt-6">
+            <UButton variant="outline" @click="showDisable2FAModal = false">
+              Cancel
+            </UButton>
+            <UButton
+              color="error"
+              @click="disableTwoFactor"
+              :loading="twoFactorLoading"
+            >
+              Disable 2FA
+            </UButton>
+          </div>
+        </div>
+      </template>
+    </UModal>
+
     <!-- Delete Account Modal -->
     <UModal v-model:open="showDeleteModal">
       <template #content>
         <div class="p-6">
-          <h3 class="text-lg font-semibold mb-4">Delete Account</h3>
-          <p class="text-muted mb-6">
+          <h3 class="text-lg font-semibold mb-4 text-error">Delete Account</h3>
+
+          <p class="text-muted mb-4">
             Are you sure you want to delete your account? This action cannot be undone.
+            All your data, including organizations you own, will be permanently deleted.
           </p>
+
+          <UFormField label="Password" class="mb-6">
+            <UInput
+              v-model="deleteAccountPassword"
+              type="password"
+              placeholder="Enter your password to confirm"
+              class="w-full"
+            />
+          </UFormField>
+
           <div class="flex justify-end gap-2">
             <UButton variant="outline" @click="showDeleteModal = false">
               Cancel
             </UButton>
-            <UButton color="error" @click="deleteAccount" :loading="deleteLoading">
+            <UButton
+              color="error"
+              @click="deleteAccount"
+              :loading="deleteLoading"
+              :disabled="!deleteAccountPassword"
+            >
               Delete Account
             </UButton>
           </div>

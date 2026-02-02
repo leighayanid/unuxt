@@ -11,11 +11,11 @@
     "./schema": "./src/schema/index.ts"
   },
   "scripts": {
-    "db:generate": "drizzle-kit generate",
-    "db:migrate": "drizzle-kit migrate",
-    "db:push": "drizzle-kit push",
-    "db:studio": "drizzle-kit studio",
-    "db:seed": "tsx src/seed.ts"
+    "db:generate": "dotenv -e ../../.env -- drizzle-kit generate",
+    "db:migrate": "dotenv -e ../../.env -- drizzle-kit migrate",
+    "db:push": "dotenv -e ../../.env -- drizzle-kit push",
+    "db:studio": "dotenv -e ../../.env -- drizzle-kit studio",
+    "db:seed": "dotenv -e ../../.env -- tsx src/seed.ts"
   },
   "dependencies": {
     "drizzle-orm": "^0.38.4",
@@ -23,6 +23,7 @@
   },
   "devDependencies": {
     "@types/node": "^22.10.7",
+    "dotenv-cli": "^11.0.0",
     "drizzle-kit": "^0.30.2",
     "tsx": "^4.19.2",
     "typescript": "^5.7.3"

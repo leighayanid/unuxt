@@ -1,14 +1,14 @@
 <script setup lang="ts">
-const { $authClient } = useNuxtApp();
-
 definePageMeta({
   layout: "auth",
+  middleware: "guest",
 });
 
 useSeoMeta({
   title: "Forgot Password - UNuxt",
 });
 
+const { forgotPassword } = useAuth();
 const toast = useToast();
 
 const email = ref("");
@@ -18,10 +18,7 @@ const sent = ref(false);
 async function handleSubmit() {
   loading.value = true;
   try {
-    await $authClient.forgetPassword({
-      email: email.value,
-      redirectTo: "/auth/reset-password",
-    });
+    await forgotPassword(email.value);
     sent.value = true;
     toast.add({
       title: "Email Sent",

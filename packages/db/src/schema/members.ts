@@ -1,18 +1,18 @@
-import { pgTable, text, timestamp, uuid, unique } from "drizzle-orm/pg-core";
+import { pgTable, text, timestamp, unique } from "drizzle-orm/pg-core";
 import { users } from "./users";
 import { organizations } from "./organizations";
 
 export const members = pgTable(
   "members",
   {
-    id: uuid("id").primaryKey().defaultRandom(),
-    organizationId: uuid("organization_id")
+    id: text("id").primaryKey(),
+    organizationId: text("organization_id")
       .references(() => organizations.id, { onDelete: "cascade" })
       .notNull(),
-    userId: uuid("user_id")
+    userId: text("user_id")
       .references(() => users.id, { onDelete: "cascade" })
       .notNull(),
-    role: text("role").notNull().default("member"), // 'owner', 'admin', 'member'
+    role: text("role").notNull().default("member"),
     createdAt: timestamp("created_at", { withTimezone: true })
       .defaultNow()
       .notNull(),
@@ -21,16 +21,15 @@ export const members = pgTable(
 );
 
 export const invitations = pgTable("invitations", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  organizationId: uuid("organization_id")
+  id: text("id").primaryKey(),
+  organizationId: text("organization_id")
     .references(() => organizations.id, { onDelete: "cascade" })
     .notNull(),
   email: text("email").notNull(),
   role: text("role").notNull().default("member"),
-  token: text("token").notNull().unique(),
-  status: text("status").notNull().default("pending"), // 'pending', 'accepted', 'expired', 'canceled'
+  status: text("status").notNull().default("pending"),
   expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
-  invitedById: uuid("invited_by_id")
+  inviterId: text("inviter_id")
     .references(() => users.id)
     .notNull(),
   createdAt: timestamp("created_at", { withTimezone: true })

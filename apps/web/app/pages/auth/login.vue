@@ -1,6 +1,7 @@
 <script setup lang="ts">
 definePageMeta({
   layout: "auth",
+  middleware: "guest",
 });
 
 useSeoMeta({
@@ -77,7 +78,7 @@ async function handleOAuth(provider: "google" | "github") {
       </UButton>
     </div>
 
-    <UDivider label="or" class="my-6" />
+    <USeparator label="or" class="my-6" />
 
     <!-- Email/Password Form -->
     <form @submit.prevent="handleSubmit" class="space-y-4">

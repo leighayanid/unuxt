@@ -4,34 +4,42 @@ import { organization } from "better-auth/plugins/organization";
 import { twoFactor } from "better-auth/plugins/two-factor";
 import { magicLink } from "better-auth/plugins/magic-link";
 import { db } from "@unuxt/db";
-
-// Access control for organization roles
-const organizationAccessControl = {
-  owner: ["organization", "member", "invitation"],
-  admin: ["member", "invitation"],
-  member: [],
-} as const;
+import * as schema from "@unuxt/db/schema";
 
 export const auth = betterAuth({
+  secret: process.env.BETTER_AUTH_SECRET,
+  baseURL: process.env.BETTER_AUTH_URL || "http://localhost:3000",
+
   database: drizzleAdapter(db, {
     provider: "pg",
+    usePlural: true,
+    schema: {
+      users: schema.users,
+      sessions: schema.sessions,
+      accounts: schema.accounts,
+      verifications: schema.verifications,
+      twoFactors: schema.twoFactors,
+      organizations: schema.organizations,
+      members: schema.members,
+      invitations: schema.invitations,
+    },
   }),
 
   emailAndPassword: {
     enabled: true,
-    requireEmailVerification: true,
+    requireEmailVerification: false, // Set to true when email sending is implemented
     sendResetPassword: async ({ user, url }) => {
-      // TODO: Implement email sending
-      console.log(`Reset password email for ${user.email}: ${url}`);
+      // TODO: Implement email sending with your SMTP provider
+      console.log(`[AUTH] Reset password email for ${user.email}: ${url}`);
     },
   },
 
   emailVerification: {
     sendVerificationEmail: async ({ user, url }) => {
-      // TODO: Implement email sending
-      console.log(`Verification email for ${user.email}: ${url}`);
+      // TODO: Implement email sending with your SMTP provider
+      console.log(`[AUTH] Verification email for ${user.email}: ${url}`);
     },
-    sendOnSignUp: true,
+    sendOnSignUp: false, // Set to true when email sending is implemented
   },
 
   socialProviders: {
@@ -102,7 +110,7 @@ export const auth = betterAuth({
 
   rateLimit: {
     window: 60,
-    max: 10,
+    max: 100, // Increased for development, reduce in production
   },
 
   trustedOrigins: [

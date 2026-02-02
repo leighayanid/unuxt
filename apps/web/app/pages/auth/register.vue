@@ -1,6 +1,7 @@
 <script setup lang="ts">
 definePageMeta({
   layout: "auth",
+  middleware: "guest",
 });
 
 useSeoMeta({
@@ -21,6 +22,15 @@ const loading = ref(false);
 const showPassword = ref(false);
 
 async function handleSubmit() {
+  if (form.password.length < 8) {
+    toast.add({
+      title: "Error",
+      description: "Password must be at least 8 characters",
+      color: "error",
+    });
+    return;
+  }
+
   if (form.password !== form.confirmPassword) {
     toast.add({
       title: "Error",
@@ -91,7 +101,7 @@ async function handleOAuth(provider: "google" | "github") {
       </UButton>
     </div>
 
-    <UDivider label="or" class="my-6" />
+    <USeparator label="or" class="my-6" />
 
     <!-- Registration Form -->
     <form @submit.prevent="handleSubmit" class="space-y-4">
@@ -123,6 +133,7 @@ async function handleOAuth(provider: "google" | "github") {
           :type="showPassword ? 'text' : 'password'"
           placeholder="Create a password"
           required
+          minlength="8"
           autocomplete="new-password"
           class="w-full"
         >

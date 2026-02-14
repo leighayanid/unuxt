@@ -41,6 +41,7 @@ export default defineNuxtConfig({
     smtpUser: process.env.SMTP_USER,
     smtpPass: process.env.SMTP_PASS,
     fromEmail: process.env.FROM_EMAIL,
+    fromName: process.env.FROM_NAME,
     public: {
       betterAuthUrl: process.env.BETTER_AUTH_URL || "http://localhost:3000",
       cloudinaryCloudName: process.env.CLOUDINARY_CLOUD_NAME,

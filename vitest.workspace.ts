@@ -21,6 +21,7 @@ export default defineWorkspace([
   'packages/utils',
   'packages/db',
   'packages/auth',
+  'packages/email',
   'packages/types',
   'packages/config',
   'packages/ui',

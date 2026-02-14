@@ -5,6 +5,13 @@ import { twoFactor } from "better-auth/plugins/two-factor";
 import { magicLink } from "better-auth/plugins/magic-link";
 import { db } from "@unuxt/db";
 import * as schema from "@unuxt/db/schema";
+import {
+  sendEmail,
+  resetPasswordEmail,
+  verifyEmailTemplate,
+  magicLinkEmail,
+  organizationInvitationEmail,
+} from "@unuxt/email";
 
 export const auth = betterAuth({
   secret: process.env.BETTER_AUTH_SECRET,
@@ -27,19 +34,44 @@ export const auth = betterAuth({
 
   emailAndPassword: {
     enabled: true,
-    requireEmailVerification: false, // Set to true when email sending is implemented
+    requireEmailVerification: false, // Can be enabled now that email is implemented
     sendResetPassword: async ({ user, url }) => {
-      // TODO: Implement email sending with your SMTP provider
-      console.log(`[AUTH] Reset password email for ${user.email}: ${url}`);
+      try {
+        const emailOptions = resetPasswordEmail({
+          email: user.email,
+          resetUrl: url,
+          expiresInMinutes: 60,
+        });
+        await sendEmail(emailOptions);
+        console.log(`[AUTH] Password reset email sent to ${user.email}`);
+      } catch (error) {
+        console.error("[AUTH] Failed to send password reset email:", error);
+        // Fallback to console in development
+        if (process.env.NODE_ENV === "development") {
+          console.log(`[AUTH] Reset password URL: ${url}`);
+        }
+      }
     },
   },
 
   emailVerification: {
     sendVerificationEmail: async ({ user, url }) => {
-      // TODO: Implement email sending with your SMTP provider
-      console.log(`[AUTH] Verification email for ${user.email}: ${url}`);
+      try {
+        const emailOptions = verifyEmailTemplate({
+          email: user.email,
+          verifyUrl: url,
+        });
+        await sendEmail(emailOptions);
+        console.log(`[AUTH] Verification email sent to ${user.email}`);
+      } catch (error) {
+        console.error("[AUTH] Failed to send verification email:", error);
+        // Fallback to console in development
+        if (process.env.NODE_ENV === "development") {
+          console.log(`[AUTH] Verification URL: ${url}`);
+        }
+      }
     },
-    sendOnSignUp: false, // Set to true when email sending is implemented
+    sendOnSignUp: false, // Can be enabled when ready
   },
 
   socialProviders: {
@@ -76,10 +108,23 @@ export const auth = betterAuth({
         },
       },
       sendInvitationEmail: async ({ email, organization, invitedBy, url }) => {
-        // TODO: Implement email sending
-        console.log(
-          `Invitation email for ${email} to join ${organization.name}: ${url}`
-        );
+        try {
+          const emailOptions = organizationInvitationEmail({
+            email,
+            organizationName: organization.name,
+            invitedBy: invitedBy.name || invitedBy.email,
+            inviteUrl: url,
+            role: "member", // Default role, Better Auth handles the actual role
+          });
+          await sendEmail(emailOptions);
+          console.log(`[AUTH] Invitation email sent to ${email} for ${organization.name}`);
+        } catch (error) {
+          console.error("[AUTH] Failed to send invitation email:", error);
+          // Fallback to console in development
+          if (process.env.NODE_ENV === "development") {
+            console.log(`[AUTH] Invitation URL: ${url}`);
+          }
+        }
       },
     }),
 
@@ -92,8 +137,21 @@ export const auth = betterAuth({
 
     magicLink({
       sendMagicLink: async ({ email, url }) => {
-        // TODO: Implement email sending
-        console.log(`Magic link for ${email}: ${url}`);
+        try {
+          const emailOptions = magicLinkEmail({
+            email,
+            magicUrl: url,
+            expiresInMinutes: 15,
+          });
+          await sendEmail(emailOptions);
+          console.log(`[AUTH] Magic link email sent to ${email}`);
+        } catch (error) {
+          console.error("[AUTH] Failed to send magic link email:", error);
+          // Fallback to console in development
+          if (process.env.NODE_ENV === "development") {
+            console.log(`[AUTH] Magic link URL: ${url}`);
+          }
+        }
       },
       expiresIn: 60 * 15, // 15 minutes
     }),

@@ -27,7 +27,7 @@ A production-ready Nuxt 4 starter template with authentication, organizations, a
   color: neutral
   icon: i-simple-icons-github
   size: xl
-  to: https://github.com/your-repo/unuxt
+  to: https://github.com/leighayanid/unuxt
   target: _blank
   variant: outline
   ---

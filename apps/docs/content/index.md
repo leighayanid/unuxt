@@ -66,6 +66,30 @@ What you can do
 
   :::u-page-feature
   ---
+  icon: i-lucide-mail
+  to: /guide/email-system
+  ---
+  #title
+  Send beautiful emails
+
+  #description
+  Transactional emails with Nodemailer and responsive HTML templates.
+  :::
+
+  :::u-page-feature
+  ---
+  icon: i-lucide-user-plus
+  to: /guide/invitation-flow
+  ---
+  #title
+  Invite team members
+
+  #description
+  Complete invitation system with email notifications and seamless acceptance.
+  :::
+
+  :::u-page-feature
+  ---
   icon: i-lucide-user
   to: /guide/profile
   ---

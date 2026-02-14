@@ -11,11 +11,18 @@
     "./formatters": "./src/formatters.ts",
     "./constants": "./src/constants.ts"
   },
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest run --coverage"
+  },
   "dependencies": {
     "zod": "^3.24.1"
   },
   "devDependencies": {
     "@unuxt/config": "workspace:*",
-    "typescript": "^5.7.3"
+    "typescript": "^5.7.3",
+    "vitest": "^2.1.8"
   }
 }

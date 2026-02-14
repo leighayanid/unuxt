@@ -10,12 +10,19 @@
     "./server": "./src/server.ts",
     "./client": "./src/client.ts"
   },
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest run --coverage"
+  },
   "dependencies": {
     "better-auth": "^1.1.14",
     "@unuxt/db": "workspace:*"
   },
   "devDependencies": {
     "@unuxt/config": "workspace:*",
-    "typescript": "^5.7.3"
+    "typescript": "^5.7.3",
+    "vitest": "^2.1.8"
   }
 }

@@ -108,9 +108,19 @@ apps/
 
 **Organization flow:**
 1. User creates org → becomes owner
-2. Owner/admin invites members → invitation record created
-3. Invited user accepts → member record created with specified role
-4. Access controlled by membership + role + permissions
+2. Owner/admin invites members → invitation record created in database
+3. Email sent with invitation link: `/auth/accept-invite/[invitationId]`
+4. Invited user clicks link:
+   - If not logged in: Prompted to sign in or create account (redirects back after auth)
+   - If logged in: Auto-accepts invitation and redirects to organization
+5. Member record created with specified role
+6. Access controlled by membership + role + permissions
+
+**Invitation acceptance:**
+- Page: `apps/web/app/pages/auth/accept-invite/[token].vue`
+- Uses Better Auth's `acceptInvitation` API
+- Handles edge cases: expired, already accepted, invalid tokens
+- Composable: `useOrganization().acceptInvitation(invitationId)`
 
 #### 4. Nuxt App Structure (`apps/web`)
 
@@ -341,7 +351,7 @@ pnpm --filter "...@unuxt/web" build # Build web + dependencies
 
 3. **Organization slug routing:** Slugs are unique and used in URLs (`/org/[slug]`). Enforce validation from `@unuxt/utils/validation` (slugSchema).
 
-4. **Email sending:** Currently stubbed with console.log. Implement SMTP in `packages/auth/src/server.ts` when ready.
+4. **Email sending:** Implemented via `@unuxt/email` package with Nodemailer. Configure SMTP in `.env` (see `packages/email/README.md`). Falls back to console.log if SMTP not configured.
 
 5. **Cloudinary module:** Conditionally loaded based on env var. App works without it (upload features disabled).
 

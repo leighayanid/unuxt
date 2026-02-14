@@ -32,27 +32,34 @@
 
 ---
 
-### 2. Invitation Acceptance Flow
-**Priority: HIGH** - Invitations can be sent but acceptance is incomplete
+### 2. Invitation Acceptance Flow ✅ COMPLETED
+**Priority: HIGH** - ~~Invitations can be sent but acceptance is incomplete~~
 
 **Implementation tasks:**
-- [ ] Create `/auth/accept-invite/[token]` page
-- [ ] Add `POST /api/org/accept-invitation` API route
-- [ ] Generate secure invitation tokens
-- [ ] Add token expiration (7 days)
-- [ ] Handle edge cases:
-  - [ ] Expired tokens
-  - [ ] Already accepted invitations
-  - [ ] User already in organization
-  - [ ] Organization deleted
-- [ ] Send email with acceptance link
-- [ ] Auto-accept if user is logged in
-- [ ] Redirect to org after acceptance
+- [x] Create `/auth/accept-invite/[token]` page
+- [x] Uses Better Auth's built-in acceptInvitation API (no custom route needed)
+- [x] Secure invitation tokens (handled by Better Auth)
+- [x] Token expiration via database schema
+- [x] Handle edge cases:
+  - [x] Expired tokens
+  - [x] Already accepted invitations
+  - [x] User already in organization
+  - [x] Organization deleted
+- [x] Send email with acceptance link
+- [x] Auto-accept if user is logged in
+- [x] Redirect to org after acceptance
+- [x] Add acceptInvitation to useOrganization composable
+- [x] Add E2E test placeholders
+- [x] Add unit tests for email template
 
-**Files to create:**
-- `apps/web/app/pages/auth/accept-invite/[token].vue`
-- `apps/web/server/api/org/accept-invitation.post.ts`
-- `packages/db/src/schema/invitation-tokens.ts` (if separate from invitations)
+**Files created:**
+- `apps/web/app/pages/auth/accept-invite/[token].vue` ✅
+- `apps/web/tests/e2e/invitation.spec.ts` ✅
+- `packages/email/src/templates/organization-invitation.test.ts` ✅
+
+**Files updated:**
+- `packages/auth/src/server.ts` - Updated invitation email URL generation
+- `apps/web/app/composables/useOrganization.ts` - Added acceptInvitation method
 
 ---
 
@@ -627,7 +634,7 @@ These can be done quickly and provide immediate value:
 
 ---
 
-**Last Updated:** 2024-12-XX
+**Last Updated:** 2025-01-XX
 **Total Items:** 100+
-**Completed:** 0
-**In Progress:** Email sending system
+**Completed:** 2 (Email sending system, Invitation acceptance flow)
+**In Progress:** None

@@ -92,6 +92,16 @@ export function useOrganization() {
     return result.data;
   }
 
+  async function acceptInvitation(invitationId: string) {
+    const result = await $authClient.organization.acceptInvitation({
+      invitationId,
+    });
+    if (result.error) {
+      throw new Error(result.error.message);
+    }
+    return result.data;
+  }
+
   return {
     activeOrg: activeOrgData,
     organizations: organizationsList,
@@ -103,5 +113,6 @@ export function useOrganization() {
     removeMember,
     updateMemberRole,
     cancelInvitation,
+    acceptInvitation,
   };
 }

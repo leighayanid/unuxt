@@ -107,14 +107,20 @@ export const auth = betterAuth({
           permissions: [],
         },
       },
-      sendInvitationEmail: async ({ email, organization, invitedBy, url }) => {
+      sendInvitationEmail: async ({ email, organization, invitedBy, url, invitation }) => {
         try {
+          // Extract invitation ID and create custom frontend URL
+          // Better Auth provides the invitation object with the ID
+          const invitationId = invitation.id;
+          const baseURL = process.env.BETTER_AUTH_URL || "http://localhost:3000";
+          const customInviteUrl = `${baseURL}/auth/accept-invite/${invitationId}`;
+
           const emailOptions = organizationInvitationEmail({
             email,
             organizationName: organization.name,
             invitedBy: invitedBy.name || invitedBy.email,
-            inviteUrl: url,
-            role: "member", // Default role, Better Auth handles the actual role
+            inviteUrl: customInviteUrl,
+            role: invitation.role || "member",
           });
           await sendEmail(emailOptions);
           console.log(`[AUTH] Invitation email sent to ${email} for ${organization.name}`);

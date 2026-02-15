@@ -208,12 +208,21 @@ All auth emails are automatically sent via `packages/auth/src/server.ts`. Falls 
 - Gmail requires app-specific password (not regular password)
 - Check server logs for "[EMAIL] Email service initialized successfully"
 
-### 2. Environment Variables
+### 2. Environment Variables & Validation
+
+**Environment validation:**
+All environment variables are validated at server startup using Zod schemas in `packages/config/src/env.ts`. The app will fail fast with clear error messages if required variables are missing or invalid.
+
+**Validation features:**
+- Type-safe environment variables with TypeScript inference
+- Automatic validation on server startup (see `apps/web/server/plugins/00.env-validation.ts`)
+- Clear error messages for missing/invalid variables
+- Feature flags to check if optional features are configured (`featureFlags.hasEmailConfig()`, etc.)
 
 **Required for development:**
-- `DATABASE_URL` - PostgreSQL connection string
-- `BETTER_AUTH_SECRET` - Min 32 chars for auth encryption
-- `BETTER_AUTH_URL` - App URL (http://localhost:3000 in dev)
+- `DATABASE_URL` - PostgreSQL connection string (validated as valid PostgreSQL URL)
+- `BETTER_AUTH_SECRET` - Min 32 chars for auth encryption (enforced)
+- `BETTER_AUTH_URL` - App URL (http://localhost:3000 in dev, validated as URL)
 
 **Optional (OAuth):**
 - `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`
@@ -221,12 +230,25 @@ All auth emails are automatically sent via `packages/auth/src/server.ts`. Falls 
 
 **Optional (Features):**
 - `CLOUDINARY_*` - Image uploads (conditional module loading)
-- `SMTP_*` - Email sending (currently console.log stubs)
+- `SMTP_*` - Email sending (validated SMTP configuration)
 
 **Environment files:**
 - `.env` - Development (git-ignored)
-- `.env.example` - Template with all variables
-- `.env.test` - Test environment template
+- `.env.example` - Template with comprehensive documentation
+- `.env.test.example` - Test environment template
+
+**Usage in code:**
+```typescript
+import { validateEnv, featureFlags } from '@unuxt/config/env'
+
+// Validate all environment variables
+const env = validateEnv() // Exits process if invalid
+
+// Check optional features
+if (featureFlags.hasEmailConfig()) {
+  // Email is configured, send email
+}
+```
 
 ### 2. Adding New Database Tables
 
@@ -304,7 +326,82 @@ definePageMeta({
 - Use Nuxt's `useState()` for cross-component state
 - Handle loading/error states internally
 
-### 6. Turborepo Task Orchestration
+### 6. Security Features
+
+**Security Module (nuxt-security):**
+The app uses `nuxt-security` module for comprehensive security headers and protections. Configuration in `nuxt.config.ts`:
+
+**Enabled security features:**
+- **CSP (Content Security Policy):** Prevents XSS attacks with strict script/style policies
+- **CSRF Protection:** Protects POST/PUT/PATCH/DELETE requests (excludes Better Auth endpoints)
+- **Rate Limiting:** 150 requests per minute per IP
+- **Security Headers:**
+  - `Strict-Transport-Security` (HSTS)
+  - `X-Frame-Options: SAMEORIGIN`
+  - `X-Content-Type-Options: nosniff`
+  - `X-XSS-Protection`
+  - `Referrer-Policy: no-referrer`
+  - `Permissions-Policy` (restricts camera, geolocation, etc.)
+- **CORS:** Configured for same-origin by default
+- **Method Restriction:** Only allows GET, HEAD, POST, PUT, PATCH, DELETE
+
+**Password Security:**
+Enhanced password validation in `packages/utils/src/validation.ts` and `packages/utils/src/security.ts`:
+
+1. **Complexity Requirements:**
+   - Minimum 8 characters
+   - At least one uppercase letter
+   - At least one lowercase letter
+   - At least one number
+   - At least one special character (!@#$%^&*...)
+
+2. **Breach Checking (HIBP):**
+   - Uses Have I Been Pwned API to check passwords against known data breaches
+   - k-anonymity model (only sends first 5 chars of SHA-1 hash for privacy)
+   - Caching to prevent duplicate API calls
+   - Available functions:
+     - `checkPasswordBreach(password)` - Check if password is breached
+     - `checkPasswordBreachCached(password)` - Cached version
+     - `validatePassword(password, checkBreaches)` - Full validation with breach check
+     - `checkPasswordStrength(password)` - Returns strength analysis
+
+3. **Server-side Validation:**
+   - `apps/web/server/utils/password-validation.ts` - Helper for API routes
+   - Breach checking enabled in production, optional in development
+   - Example usage in registration/password reset endpoints
+
+**Usage examples:**
+
+```typescript
+// Client-side: Check password strength
+import { checkPasswordStrength } from '@unuxt/utils'
+
+const result = checkPasswordStrength('MyP@ssw0rd123')
+// { strength: 'strong', score: 5, feedback: [], isValid: true }
+
+// Server-side: Validate with breach check
+import { validatePasswordWithBreachCheck } from '~/server/utils/password-validation'
+
+const validation = await validatePasswordWithBreachCheck(password)
+if (!validation.isValid) {
+  throw createError({ statusCode: 400, message: validation.errors.join(', ') })
+}
+if (validation.isBreached) {
+  throw createError({
+    statusCode: 400,
+    message: 'Password has been exposed in data breaches'
+  })
+}
+```
+
+**Security best practices:**
+- Always validate user input on the server-side
+- Use Better Auth's built-in CSRF protection for auth routes
+- Rate limiting is automatic for all API routes
+- Security headers are automatically applied to all responses
+- HTTPS enforced in production (upgrade-insecure-requests CSP directive)
+
+### 7. Turborepo Task Orchestration
 
 **Task dependencies:**
 - `build` depends on `^build` (dependencies build first)
@@ -364,6 +461,16 @@ pnpm --filter "...@unuxt/web" build # Build web + dependencies
 9. **Middleware execution order:** Global middleware runs first (auth.global.ts), then route-specific middleware (org.ts, admin.ts).
 
 10. **Nuxt 4 compatibility mode:** Set in nuxt.config.ts. Some features may differ from Nuxt 3 docs.
+
+11. **Environment validation:** Server startup will fail if required environment variables are missing or invalid. Check `packages/config/src/env.ts` for validation rules. Generate `BETTER_AUTH_SECRET` with: `openssl rand -base64 32`
+
+12. **Security headers:** The `nuxt-security` module applies strict security headers. If you need to adjust CSP for third-party scripts/styles, update the `security.headers.contentSecurityPolicy` in `nuxt.config.ts`.
+
+13. **Password breach checking:** HIBP API calls are cached for 1 hour to prevent duplicate checks. Breach checking is enabled in production by default but can be disabled in development for faster testing.
+
+14. **CSRF protection:** Automatically enabled for all POST/PUT/PATCH/DELETE requests except `/api/auth/**` (Better Auth has its own CSRF protection). If you add custom forms, ensure they're protected.
+
+15. **Rate limiting:** Global rate limit is 150 requests/minute per IP. Better Auth has additional rate limiting for auth endpoints (5 failed login attempts = 15 min cooldown).
 
 ## Documentation
 

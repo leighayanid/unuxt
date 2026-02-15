@@ -9,9 +9,18 @@ A production-ready Nuxt 4 starter template with authentication, organizations, a
 - **Better Auth** for authentication (email/password, OAuth, magic links, 2FA)
 - **Organizations** with RBAC (roles and permissions)
 - **Profile Management** with avatar uploads
+- **Email System** with beautiful HTML templates (password reset, verification, invitations)
+- **Security First**
+  - Environment validation with Zod
+  - Security headers (CSP, HSTS, X-Frame-Options, etc.)
+  - CSRF protection
+  - Rate limiting (150 req/min)
+  - Password breach checking (Have I Been Pwned)
+  - Strong password requirements
 - **Theme Management** (dark/light mode, custom colors)
 - **Cloudinary** for image uploads
 - **PostgreSQL** with Drizzle ORM
+- **Testing** with Vitest + Playwright E2E
 - **Docker** ready for deployment
 - **Turborepo** monorepo structure
 
